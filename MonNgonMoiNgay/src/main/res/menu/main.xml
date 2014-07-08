@@ -1,0 +1,25 @@
+<menu xmlns:android="http://schemas.android.com/apk/res/android" >
+
+    <item
+        android:id="@+id/danhgia"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="Đánh giá ứng dụng"/>
+
+
+    <item
+        android:id="@+id/moreApp"
+        android:orderInCategory="100"
+        android:showAsAction="never"
+        android:title="More Apps"/>
+
+    
+    <item
+        android:id="@+id/menu_search"
+        android:actionViewClass="android.widget.SearchView"
+        android:icon="@drawable/ic_search"
+        android:orderInCategory="0"
+        android:showAsAction="always|collapseActionView"
+        android:title="Search"/>
+
+</menu>
