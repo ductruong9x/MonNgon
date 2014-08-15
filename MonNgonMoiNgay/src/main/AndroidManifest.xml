@@ -30,14 +30,11 @@
             android:name=".SearchActivity"
             android:label="@string/title_activity_search" >
         </activity>
-        <activity android:name="com.startapp.android.publish.list3d.List3DActivity"
-            android:taskAffinity="com.appfree.monngonvietnam.AppWall"
-            android:theme="@android:style/Theme" />
 
-        <activity android:name="com.startapp.android.publish.AppWallActivity"
-            android:theme="@android:style/Theme.Translucent"
-            android:taskAffinity="com.appfree.monngonvietnam.AppWall"
-            android:configChanges="orientation|keyboardHidden|screenSize" />
+        <meta-data android:name="com.google.android.gms.version"
+            android:value="@integer/google_play_services_version"/>
+        <activity android:name="com.google.android.gms.ads.AdActivity"
+            android:configChanges="keyboard|keyboardHidden|orientation|screenLayout|uiMode|screenSize|smallestScreenSize"/>
     </application>
 
 </manifest>

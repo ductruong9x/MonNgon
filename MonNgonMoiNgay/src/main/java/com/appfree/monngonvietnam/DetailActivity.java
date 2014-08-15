@@ -16,6 +16,8 @@ import android.view.View;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.nostra13.universalimageloader.cache.disc.naming.Md5FileNameGenerator;
 import com.nostra13.universalimageloader.core.DisplayImageOptions;
 import com.nostra13.universalimageloader.core.ImageLoader;
@@ -25,7 +27,6 @@ import com.nostra13.universalimageloader.core.assist.ImageLoadingListener;
 import com.nostra13.universalimageloader.core.assist.QueueProcessingType;
 import com.nostra13.universalimageloader.core.display.RoundedBitmapDisplayer;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.startapp.android.publish.StartAppAd;
 
 public class DetailActivity extends Activity {
     private TextView tvTenMonAn, tvNguyenLieu, tvCachLam, tvViTri;
@@ -35,6 +36,7 @@ public class DetailActivity extends Activity {
 
     private ImageLoader imvLoader;
     private DisplayImageOptions options;
+    private AdView adView;
 
     @Override
     protected void onCreate(Bundle savedInstanceState) {
@@ -48,7 +50,10 @@ public class DetailActivity extends Activity {
             tintManager.setNavigationBarTintResource(R.color.app_color);
         }
         setContentView(R.layout.activity_detail);
-        StartAppAd.showSlider(this);
+
+        adView=(AdView)findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
+
         actionBar = getActionBar();
         actionBar.setBackgroundDrawable(
                 new ColorDrawable(Color.parseColor("#9c27b0")));
@@ -68,7 +73,7 @@ public class DetailActivity extends Activity {
     }
 
     public void loadDuLieu(String str) {
-        String pName = this.getClass().getPackage().getName();
+        String pName = getPackageName();
         String folder = "/data/data/" + pName + "/databases/";
         String dbPath = folder + "database.db";
         options = new DisplayImageOptions.Builder()
@@ -150,5 +155,11 @@ public class DetailActivity extends Activity {
                 break;
         }
         return super.onOptionsItemSelected(item);
+    }
+
+    @Override
+    public void onBackPressed() {
+
+        super.onBackPressed();
     }
 }

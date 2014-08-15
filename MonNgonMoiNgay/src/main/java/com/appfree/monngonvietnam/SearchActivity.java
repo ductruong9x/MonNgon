@@ -17,8 +17,9 @@ import android.widget.ListView;
 
 import com.appfree.monngonvietnam.adapter.AdapterMonAn;
 import com.appfree.monngonvietnam.model.MonAnChiTiet;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.startapp.android.publish.StartAppAd;
 
 import java.util.ArrayList;
 
@@ -28,6 +29,7 @@ public class SearchActivity extends Activity {
     private SQLiteDatabase db;
     private AdapterMonAn adapter;
     private ActionBar actionBar;
+    private AdView adView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -39,7 +41,9 @@ public class SearchActivity extends Activity {
             tintManager.setNavigationBarTintResource(R.color.app_color);
         }
         setContentView(R.layout.activity_search);
-        StartAppAd.showSlider(this);
+        adView=(AdView)findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
+
         actionBar=getActionBar();
         actionBar.setHomeButtonEnabled(true);
         actionBar.setDisplayHomeAsUpEnabled(true);

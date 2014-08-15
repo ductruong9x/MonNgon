@@ -12,5 +12,10 @@
     <string name="title_activity_detail">DetailActivity</string>
     <string name="hello_world">Hello world!</string>
     <string name="title_activity_search">Tìm kiếm</string>
+    <string name="title">Thoát ứng dụng ?</string>
+    <string name="content">Bạn có muốn thoát ứng dụng không?\nBạn có muốn thử game Choose Color không?\nNó khó đấy</string>
+    <string name="exit">Thoát</string>
+    <string name="more">Thử</string>
+    <string name="cancel">Hủy</string>
 
 </resources>

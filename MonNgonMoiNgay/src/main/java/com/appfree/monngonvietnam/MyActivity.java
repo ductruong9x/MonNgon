@@ -2,8 +2,10 @@ package com.appfree.monngonvietnam;
 
 import android.app.ActionBar;
 import android.app.Activity;
+import android.app.AlertDialog;
 import android.app.ProgressDialog;
 import android.content.Context;
+import android.content.DialogInterface;
 import android.content.Intent;
 import android.content.SharedPreferences;
 import android.database.Cursor;
@@ -28,10 +30,10 @@ import android.widget.SearchView;
 
 import com.appfree.monngonvietnam.adapter.AdapterMonAn;
 import com.appfree.monngonvietnam.model.MonAnChiTiet;
+import com.google.android.gms.ads.AdRequest;
+import com.google.android.gms.ads.AdView;
+import com.google.android.gms.ads.InterstitialAd;
 import com.readystatesoftware.systembartint.SystemBarTintManager;
-import com.startapp.android.publish.StartAppAd;
-import com.startapp.android.publish.StartAppSDK;
-
 import java.io.File;
 import java.io.FileOutputStream;
 import java.io.IOException;
@@ -52,9 +54,10 @@ public class MyActivity extends Activity
     private SQLiteDatabase db;
     private AdapterMonAn adapter;
     private SearchView mSearchView;
-    private String dev_id="108403113";
-    private String app_id="207353163";
-    private StartAppAd startAppAd;
+    private String UNIT_ID="ca-app-pub-1857950562418699/3254233562";
+    private InterstitialAd interstitialAd;
+
+    private AdView adView;
     @Override
     protected void onCreate(Bundle savedInstanceState) {
         super.onCreate(savedInstanceState);
@@ -65,11 +68,16 @@ public class MyActivity extends Activity
             tintManager.setStatusBarTintResource(R.color.app_color);
             tintManager.setNavigationBarTintResource(R.color.app_color);
         }
-        StartAppSDK.init(this,dev_id,app_id);
-        StartAppAd.showSplash(this, savedInstanceState);
+
+     //   StartAppAd.showSplash(this, savedInstanceState);
         setContentView(R.layout.activity_my);
-        startAppAd=new StartAppAd(this);
-        startAppAd.loadAd();
+        adView=(AdView)findViewById(R.id.adView);
+        adView.loadAd(new AdRequest.Builder().build());
+        interstitialAd=new InterstitialAd(this);
+        interstitialAd.setAdUnitId(UNIT_ID);
+        interstitialAd.loadAd(new AdRequest.Builder().build());
+        danhGia();
+
         actionBar = getActionBar();
         actionBar.setBackgroundDrawable(new ColorDrawable(Color.parseColor("#9c27b0")));
         actionBar.setIcon(android.R.color.transparent);
@@ -142,7 +150,7 @@ public class MyActivity extends Activity
 
 
     public void loadDuLieu() {
-        String pName = this.getClass().getPackage().getName();
+        String pName = getPackageName();
         String folder = "/data/data/" + pName + "/databases/";
         String dbPath = folder + "database.db";
         Log.v("duong dan", dbPath);
@@ -187,7 +195,7 @@ public class MyActivity extends Activity
 
 
     private void copyDatabase(Context context) throws IOException {
-        String pName = this.getClass().getPackage().getName();
+        String pName = getPackageName();
         String folder = "/data/data/" + pName + "/databases/";
         File CheckDirectory;
         CheckDirectory = new File(folder);
@@ -360,7 +368,7 @@ public class MyActivity extends Activity
             case R.id.moreApp:
                 Intent goMoreApp = new Intent(Intent.ACTION_VIEW)
                         .setData(Uri
-                                .parse("https://play.google.com/store/apps/developer?id=App+Entertainment"));
+                                .parse("https://play.google.com/store/apps/developer?id=.FreeVN"));
                 startActivity(goMoreApp);
                 break;
             case R.id.danhgia:
@@ -399,7 +407,7 @@ public class MyActivity extends Activity
     }
 
     public void loadDuLieuTheoCachNau(String dieukien) {
-        String pName = this.getClass().getPackage().getName();
+        String pName = getPackageName();
         String folder = "/data/data/" + pName + "/databases/";
         String dbPath = folder + "database.db";
         db = SQLiteDatabase.openDatabase(dbPath, null,
@@ -436,7 +444,107 @@ public class MyActivity extends Activity
 
     @Override
     public void onBackPressed() {
-        startAppAd.onBackPressed();
-        super.onBackPressed();
+        AlertDialog.Builder dialog = new AlertDialog.Builder(MyActivity.this);
+        dialog.setIcon(R.drawable.ic_launcher);
+        dialog.setTitle(R.string.title);
+        dialog.setMessage(R.string.content);
+        dialog.setNegativeButton(R.string.exit, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                finish();
+                interstitialAd.show();
+            }
+        });
+        dialog.setNeutralButton(R.string.more, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                Intent goToMarket = new Intent(Intent.ACTION_VIEW).setData(Uri
+                        .parse("market://details?id=com.gamefree.choosecolor"));
+                startActivity(goToMarket);
+
+            }
+        });
+        dialog.setPositiveButton(R.string.cancel, new DialogInterface.OnClickListener() {
+            @Override
+            public void onClick(DialogInterface dialog, int which) {
+                dialog.dismiss();
+            }
+        });
+        dialog.create().show();
+    }
+    public void danhGia() {
+        SharedPreferences getPre = getSharedPreferences("setting", MODE_PRIVATE);
+        int i = getPre.getInt("VOTE", 0);
+        SharedPreferences pre;
+        SharedPreferences.Editor edit;
+        switch (i) {
+            case 0:
+                pre = getSharedPreferences("setting", MODE_PRIVATE);
+                edit = pre.edit();
+                edit.putInt("VOTE", 1);
+                edit.commit();
+                break;
+            case 1:
+                pre = getSharedPreferences("setting", MODE_PRIVATE);
+                edit = pre.edit();
+                edit.putInt("VOTE", i + 1);
+                edit.commit();
+                break;
+            case 2:
+                pre = getSharedPreferences("setting", MODE_PRIVATE);
+                edit = pre.edit();
+                edit.putInt("VOTE", i + 1);
+                edit.commit();
+                break;
+            case 3:
+                pre = getSharedPreferences("setting", MODE_PRIVATE);
+                edit = pre.edit();
+                edit.putInt("VOTE", i + 1);
+                edit.commit();
+                break;
+            case 4:
+                pre = getSharedPreferences("setting", MODE_PRIVATE);
+                edit = pre.edit();
+                edit.putInt("VOTE", i + 1);
+                edit.commit();
+                break;
+            case 5:
+                AlertDialog.Builder dialog=new AlertDialog.Builder(this);
+                dialog.setTitle("Vote Application");
+                dialog.setMessage("You can vote for Quick Reboot");
+                dialog.setIcon(R.drawable.ic_launcher);
+                dialog.setNegativeButton("Ok",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        Intent goToMarket = new Intent(Intent.ACTION_VIEW)
+                                .setData(Uri.parse("market://details?id="
+                                        + getPackageName()));
+                        startActivity(goToMarket);
+                        SharedPreferences pre = getSharedPreferences("setting", MODE_PRIVATE);
+                        SharedPreferences.Editor edit = pre.edit();
+                        edit.putInt("VOTE",6);
+                        edit.commit();
+                    }
+                });
+                dialog.setNeutralButton("Do not show",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        SharedPreferences pre = getSharedPreferences("setting",
+                                MODE_PRIVATE);
+                        SharedPreferences.Editor edit = pre.edit();
+                        edit.putInt("VOTE", 6);
+                        edit.commit();
+                        dialog.dismiss();
+                    }
+                });
+                dialog.setPositiveButton("Later",new DialogInterface.OnClickListener() {
+                    @Override
+                    public void onClick(DialogInterface dialog, int which) {
+                        dialog.dismiss();
+                    }
+                });
+                dialog.create().show();
+                break;
+        }
     }
 }
